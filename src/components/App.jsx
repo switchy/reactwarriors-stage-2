@@ -55,8 +55,18 @@ export default class App extends React.Component {
         .setAttribute("src", eventReader.target.result);
     };
 
+    let doAvatarLoad = true;
     if (event.target.files.length) {
-      reader.readAsDataURL(event.target.files[0]);
+      const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
+      if (allowedTypes.indexOf(event.target.files[0].type) === -1) {
+        //No image select
+        this.setState({
+          errors: {
+            avatar: "Image is not valid format"
+          }
+        });
+        doAvatarLoad = false;
+      }
     } else {
       //No image select
       this.setState({
@@ -64,9 +74,16 @@ export default class App extends React.Component {
           avatar: "Required"
         }
       });
+      doAvatarLoad = false;
+    }
+
+    if (doAvatarLoad) {
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
       document.getElementById("avatarImage")
         .setAttribute("src", FormStep3.getImgNoneSrc);
     }
+
   };
 
   onResetForm = event => {
