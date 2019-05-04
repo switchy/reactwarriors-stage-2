@@ -1,8 +1,8 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 
 class FormStep3 extends React.Component {
 
-  static getImgNoneSrc = ('/static/default-avatar.png');
+  static getImgNoneSrc = ("/static/default-avatar.png");
 
   render() {
     const { state, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
@@ -11,10 +11,10 @@ class FormStep3 extends React.Component {
       <Fragment>
 
         <img className="mb-4"
-             width="100%"
-             id="avatarImage"
-             src={ state.avatar || FormStep3.getImgNoneSrc }
-             alt=""
+          width="100%"
+          id="avatarImage"
+          src={ state.avatar || FormStep3.getImgNoneSrc }
+          alt=""
         />
 
         <div className="mb-4">

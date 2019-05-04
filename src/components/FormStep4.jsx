@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import countries from "../data/countries";
 import citys from "../data/citys";
 
@@ -16,7 +16,7 @@ class FormStep4 extends React.Component {
             <div className="col-4">
               <img
                 width="100%"
-                src={ state.avatar }
+                src={state.avatar}
                 alt=""
               />
             </div>

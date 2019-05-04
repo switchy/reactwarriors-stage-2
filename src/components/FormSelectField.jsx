@@ -10,7 +10,7 @@ class FormSelectField extends React.Component {
         </option>
       );
     });
-  }
+  };
 
   render() {
     const {
@@ -43,6 +43,6 @@ class FormSelectField extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default FormSelectField;

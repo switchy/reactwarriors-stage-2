@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import FormTextField from "./FormTextField";
 import FormSelectField from "./FormSelectField";
 import countries from "../data/countries";

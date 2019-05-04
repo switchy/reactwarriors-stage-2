@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import FormTextField from "./FormTextField";
 
 class FormStep1 extends React.Component {
