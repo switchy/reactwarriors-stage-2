@@ -22,12 +22,7 @@ export default class App extends React.Component {
       avatar: "",
     };
 
-    this.state = Object.assign({}, {
-      errors : {},
-      _step: 1
-    },
-    this.initialState
-    );
+    this.state = { ...this.initialState, errors : {}, _step: 1 };
   }
 
 
@@ -91,7 +86,7 @@ export default class App extends React.Component {
       errors: {},
       _step: 1
     };
-    newState = Object.assign({}, newState, this.initialState);
+    newState = { ...newState, ...this.initialState };
     this.setState(newState);
   };
 
