@@ -50,40 +50,43 @@ export default class App extends React.Component {
           avatar: eventReader.target.result,
         },
         errors: {
-          avatar: false
+          avatar: ""
         }
       }));
-      document.getElementById("avatarImage")
-        .setAttribute("src", eventReader.target.result);
     };
 
     let doAvatarLoad = true;
     if (event.target.files.length) {
       const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
       if (allowedTypes.indexOf(event.target.files[0].type) === -1) {
-        //No image select
-        this.setState({
+        //Format is not valid
+        this.setState(prevState => ({
           errors: {
             avatar: "Image is not valid format"
+          },
+          values: {
+            ...prevState.values,
+            avatar: ""
           }
-        });
+        }));
         doAvatarLoad = false;
       }
     } else {
       //No image select
-      this.setState({
+      this.setState(prevState => ({
         errors: {
           avatar: "Required"
+        },
+        values: {
+          ...prevState.values,
+          avatar: ""
         }
-      });
+      }));
       doAvatarLoad = false;
     }
 
     if (doAvatarLoad) {
       reader.readAsDataURL(event.target.files[0]);
-    } else {
-      document.getElementById("avatarImage")
-        .setAttribute("src", Avatar.getImgNoneSrc);
     }
 
   };
@@ -111,22 +114,20 @@ export default class App extends React.Component {
     };
 
     let errors = {};
-    let newVals = {};
+    let newValues = { ...this.state.values };
     let fields = stepFieldList[this.state.step];
 
     fields.forEach((item) => {
-      if (item in this.state.values) {
+      if (item in newValues) {
         let isEmpty = false;
-        switch (typeof this.state.values[item]) {
+        switch (typeof newValues[item]) {
           case "string": {
-            if (this.state.values[item].trim() !== this.state.values[item]) {
-              newVals[item] = this.state.values[item].trim();
-            }
-            !this.state.values[item].trim().length && (isEmpty = true);
+            newValues[item] = newValues[item].trim();
+            !newValues[item].length && (isEmpty = true);
             break;
           }
           case "number": {
-            isNaN(this.state.values[item]) && (isEmpty = true);
+            isNaN(newValues[item]) && (isEmpty = true);
             break;
           }
           default: {
@@ -144,25 +145,25 @@ export default class App extends React.Component {
 
       switch (field) {
         case "firstname": {
-          if (!errors[field] && this.state.values[field].length < 5) {
+          if (!errors[field] && newValues[field].length < 5) {
             errors[field] = "Must be 5 characters or more";
           }
           break;
         }
         case "lastname": {
-          if (!errors[field] && this.state.values[field].length < 5) {
+          if (!errors[field] && newValues[field].length < 5) {
             errors[field] = "Must be 5 characters or more";
           }
           break;
         }
         case "password": {
-          if (!errors[field] && this.state.values[field].length < 3) {
+          if (!errors[field] && newValues[field].length < 3) {
             errors[field] = "Must be 3 character or more";
           }
           break;
         }
         case "repeatPassword": {
-          if (!errors.password && this.state.values.password !== this.state.values.repeatPassword) {
+          if (!errors.password && newValues.password !== newValues.repeatPassword) {
             errors.repeatPassword = "Must be equal password";
           }
           break;
@@ -170,14 +171,14 @@ export default class App extends React.Component {
         case "email": {
           // eslint-disable-next-line no-useless-escape
           let emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          if (!errors[field] && !emailRegexp.test(this.state.values[field])) {
+          if (!errors[field] && !emailRegexp.test(newValues[field])) {
             errors[field] = "Invalid email address";
           }
           break;
         }
         case "mobile": {
           let mobileRegexp = /^\d{10}$/;
-          if (!errors[field] && !mobileRegexp.test(this.state.values[field])) {
+          if (!errors[field] && !mobileRegexp.test(newValues[field])) {
             errors[field] = "Invalid mobile";
           }
           break;
@@ -188,25 +189,16 @@ export default class App extends React.Component {
       }
     });
 
-    errors = Object.keys(errors)
-      .filter(key => (
-        errors[key] !== false
-      ))
-      .reduce((obj, key) => {
-        obj[key] = errors[key];
-        return obj;
-      }, {});
-
     if (Object.keys(errors).length) {
       this.setState({
         errors: errors,
-        values: { ...this.state.values, ...newVals }
+        values: newValues
       });
     } else {
       let newState= {
         errors: {},
         step: this.state.step + 1,
-        values: { ...this.state.values, ...newVals }
+        values: newValues
       };
       this.setState(newState);
     }

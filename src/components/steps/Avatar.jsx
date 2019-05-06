@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
+import { DEFAULT_AVATAR_PATH } from "../../utils";
 
 class Avatar extends React.Component {
-
-  static getImgNoneSrc = ("/static/default-avatar.png");
 
   render() {
     const { values, errors, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
@@ -13,7 +12,7 @@ class Avatar extends React.Component {
         <img className="mb-4"
           width="100%"
           id="avatarImage"
-          src={ values.avatar || Avatar.getImgNoneSrc }
+          src={ values.avatar || DEFAULT_AVATAR_PATH }
           alt=""
         />
 
