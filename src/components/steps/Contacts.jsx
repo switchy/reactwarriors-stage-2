@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
-import FormTextField from "./FormTextField";
-import FormSelectField from "./FormSelectField";
-import countries from "../data/countries";
-import citys from "../data/citys";
+import FormTextField from "../FormTextField";
+import FormSelectField from "../FormSelectField";
+import countries from "../../data/countries";
+import citys from "../../data/citys";
 
-class FormStep2 extends React.Component {
+class Contacts extends React.Component {
 
   render() {
-    const { state, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
+    const { values, errors, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
 
     return (
       <Fragment>
@@ -17,9 +17,9 @@ class FormStep2 extends React.Component {
           id="email"
           name="email"
           placeHolder="Enter email"
-          value={state.email}
+          value={values.email}
           onChange={onChangeHandler}
-          error={state.errors.email}
+          error={errors.email}
         />
 
         <FormTextField
@@ -28,29 +28,29 @@ class FormStep2 extends React.Component {
           id="mobile"
           name="mobile"
           placeHolder="Enter mobile"
-          value={state.mobile}
+          value={values.mobile}
           onChange={onChangeHandler}
-          error={state.errors.mobile}
+          error={errors.mobile}
         />
 
         <FormSelectField
           labelText="Country"
           id="country"
           name="country"
-          value={state.country}
+          value={values.country}
           options={countries}
           onChange={onChangeHandler}
-          error={state.errors.country}
+          error={errors.country}
         />
 
         <FormSelectField
           labelText="City"
           id="city"
           name="city"
-          value={state.city}
+          value={values.city}
           options={[{id: "", name: "Select city"}, ...citys]}
           onChange={onChangeHandler}
-          error={state.errors.city}
+          error={errors.city}
         />
 
         <div className="d-flex justify-content-center">
@@ -75,4 +75,4 @@ class FormStep2 extends React.Component {
   }
 }
 
-export default FormStep2;
+export default Contacts;

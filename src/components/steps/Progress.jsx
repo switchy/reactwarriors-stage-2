@@ -1,44 +1,45 @@
 import React from "react";
 
-const FormStepsProgress = props => {
+const Progress = props => {
   const { step } = props;
 
-  let cssClass = [];
   let labels = [
     "Basic", "Contacts", "Avatar", "Finish"
   ];
-  for(let i = 0; i < 4; i++) {
-    cssClass.push({
+
+  let cssClass = [0, 1, 2, 3].reduce((item, i) => {
+    item.push({
       style: {},
-      iconL1: [],
-      iconL2: [],
-      numL3: []
+      iconL1: ["fas", "fa-circle", "fa-stack-2x"],
+      iconL2: ["far", "fa-circle", "fa-stack-2x"],
+      numL3: ["fa-stack-2x"]
     });
     if (i < step - 1) {
-      cssClass[i].iconL1 = ["fas", "fa-circle", "fa-stack-2x", "text-success"];
-      cssClass[i].iconL2 = ["far", "fa-circle", "fa-stack-2x", "text-black"];
-      cssClass[i].numL3  = ["fa-stack-2x", "text-white"];
+      item[i].iconL1.push("text-success");
+      item[i].iconL2.push("text-black");
+      item[i].numL3.push("text-white");
 
     } else if (i === step - 1) {
-      cssClass[i].iconL1 = ["fas", "fa-circle", "fa-stack-2x", "text-muted"];
-      cssClass[i].iconL2 = ["far", "fa-circle", "fa-stack-2x", "text-primary"];
-      cssClass[i].numL3  = ["fa-stack-2x", "text-primary"];
+      item[i].iconL1.push("text-muted");
+      item[i].iconL2.push("text-primary");
+      item[i].numL3.push("text-primary");
 
     } else {
-      cssClass[i].style  = {opacity: 0.3};
-      cssClass[i].iconL1 = ["fas", "fa-circle", "fa-stack-2x", "text-muted"];
-      cssClass[i].iconL2 = ["far", "fa-circle", "fa-stack-2x", "text-black"];
-      cssClass[i].numL3  = ["fa-stack-2x"];
+      item[i].style = {opacity: 0.3};
+      item[i].iconL1.push("text-muted");
+      item[i].iconL2.push("text-black");
+      item[i].numL3.push("fa-stack-2x");
 
     }
-  }
+    return item;
+  }, []);
 
   return (
     <div className="steps container mb-3">
       <div className="row">
         {cssClass.map((css, idx) => {
           return (
-            <div className="col-3 pl-0 pr-0 text-center" key={"form-steps" + idx}>
+            <div className="col-3 pl-0 pr-0 text-center" key={idx}>
               <div className="d-none d-md-block">
                 <span className="fa-stack fa-2x" style={css.style}>
                   <i className={css.iconL1.join(" ")} />
@@ -63,4 +64,4 @@ const FormStepsProgress = props => {
   );
 };
 
-export default FormStepsProgress;
+export default Progress;

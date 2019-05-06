@@ -27,7 +27,7 @@ class FormSelectField extends React.Component {
       <div className="form-group">
         <label htmlFor="country">{labelText}</label>
         <select
-          className={"form-control" + (error ? " is-invalid" : "")}
+          className={`form-control ${error ? " is-invalid" : ""}`}
           name={name}
           id={id}
           value={value}

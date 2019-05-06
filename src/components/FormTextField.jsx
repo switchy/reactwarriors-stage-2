@@ -14,7 +14,7 @@ const FormTextField = props => {
 
   let optAttrs = {};
   if (placeHolder) {
-    optAttrs.placeholder = placeHolder
+    optAttrs.placeholder = placeHolder;
   }
 
   return (
@@ -22,7 +22,7 @@ const FormTextField = props => {
       <label htmlFor={id}>{labelText}</label>
       <input
         type={type}
-        className={"form-control" + (error ? " is-invalid" : "")}
+        className={`form-control ${error ? " is-invalid" : ""}`}
         name={name}
         id={id}
         value={value}

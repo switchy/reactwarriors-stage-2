@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
-import countries from "../data/countries";
-import citys from "../data/citys";
+import countries from "../../data/countries";
+import citys from "../../data/citys";
 
 
-class FormStep4 extends React.Component {
+class Finish extends React.Component {
 
   render() {
-    const { state, onPrevStepHandler, onResetStepHandler } = this.props;
+    const { values, onPrevStepHandler, onResetStepHandler } = this.props;
 
     return (
       <Fragment>
@@ -16,23 +16,23 @@ class FormStep4 extends React.Component {
             <div className="col-4">
               <img
                 width="100%"
-                src={state.avatar}
+                src={values.avatar}
                 alt=""
               />
             </div>
             <div className="col-8 d-flex align-items-center">
-              <h4>{state.firstname} {state.lastname}</h4>
+              <h4>{values.firstname} {values.lastname}</h4>
             </div>
           </div>
           <div className="row mb-4">
             <div className="col-12">
-              <p><strong>Gender:</strong> {state.gender}</p>
-              <p><strong>Email:</strong> {state.email}</p>
-              <p><strong>Mobile:</strong> {state.mobile}</p>
+              <p><strong>Gender:</strong> {values.gender}</p>
+              <p><strong>Email:</strong> {values.email}</p>
+              <p><strong>Mobile:</strong> {values.mobile}</p>
               <p><strong>Location:</strong> {
-                countries.find((value) => (value.id == state.country)).name
+                countries.find((value) => (Number(value.id) === Number(values.country))).name
               }, {
-                citys.find((value) => (value.id == state.city)).name
+                citys.find((value) => (Number(value.id) === Number(values.city))).name
               }
               </p>
             </div>
@@ -61,4 +61,4 @@ class FormStep4 extends React.Component {
   }
 }
 
-export default FormStep4;
+export default Finish;

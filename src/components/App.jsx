@@ -1,15 +1,15 @@
 import React from "react";
-import FormStepsProgress from "./FormStepsProgress";
-import FormStep1 from "./FormStep1";
-import FormStep2 from "./FormStep2";
-import FormStep3 from "./FormStep3";
-import FormStep4 from "./FormStep4";
+import Progress from "./steps/Progress";
+import Basic from "./steps/Basic";
+import Contacts from "./steps/Contacts";
+import Avatar from "./steps/Avatar";
+import Finish from "./steps/Finish";
 
 export default class App extends React.Component {
   constructor() {
     super();
 
-    this.initialState = {
+    this.initialValues = {
       firstname: "",
       lastname: "",
       password: "",
@@ -22,30 +22,37 @@ export default class App extends React.Component {
       avatar: "",
     };
 
-    this.state = { ...this.initialState, errors : {}, _step: 1 };
+    this.state = {
+      values: this.initialValues,
+      errors: {},
+      step: 1
+    };
   }
 
 
-  onChangeField = (event) => {
+  onChangeField = event => {
     let fieldName  = event.target.name;
     let fieldValue = event.target.value;
-    if (event.target.type === "checkbox") {
-      fieldValue = event.target.checked;
-    }
-    this.setState({
-      [fieldName]: fieldValue
-    });
+    this.setState(prevState => ({
+      values: {
+        ...prevState.values,
+        [fieldName]: fieldValue
+      }
+    }));
   };
 
   onChangeFileUploadField = event => {
     const reader = new FileReader();
     reader.onload = eventReader => {
-      this.setState({
-        avatar: eventReader.target.result,
+      this.setState(prevState => ({
+        values: {
+          ...prevState.values,
+          avatar: eventReader.target.result,
+        },
         errors: {
           avatar: false
         }
-      });
+      }));
       document.getElementById("avatarImage")
         .setAttribute("src", eventReader.target.result);
     };
@@ -76,25 +83,26 @@ export default class App extends React.Component {
       reader.readAsDataURL(event.target.files[0]);
     } else {
       document.getElementById("avatarImage")
-        .setAttribute("src", FormStep3.getImgNoneSrc);
+        .setAttribute("src", Avatar.getImgNoneSrc);
     }
 
   };
 
-  onResetForm = event => {
-    let newState= {
+  onResetForm = () => {
+    this.setState({
+      step: 1,
       errors: {},
-      _step: 1
-    };
-    newState = { ...newState, ...this.initialState };
-    this.setState(newState);
+      values: this.initialValues
+    });
   };
 
-  onPrevStep = (step, event) => {
-    this.setState({_step: step});
+  onPrevStep = () => {
+    this.setState({
+      step: this.state.step - 1
+    });
   };
 
-  onNextStep = (step, event) => {
+  onNextStep = () => {
 
     let stepFieldList = {
       1: ["firstname", "lastname", "password", "repeatPassword", "gender"],
@@ -103,24 +111,27 @@ export default class App extends React.Component {
     };
 
     let errors = {};
-    let fields = [];
-    for(let i = 1; i < step; i++) {
-      fields = [fields, ...stepFieldList[i]];
-    }
+    let newVals = {};
+    let fields = stepFieldList[this.state.step];
 
     fields.forEach((item) => {
-      if (item in this.state) {
+      if (item in this.state.values) {
         let isEmpty = false;
-        switch (typeof this.state[item]) {
-        case "string": {
-          this.state[item] = this.state[item].trim();
-          !this.state[item].trim().length && (isEmpty = true);
-          break;
-        }
-        case "number": {
-          isNaN(this.state[item]) && (isEmpty = true);
-          break;
-        }
+        switch (typeof this.state.values[item]) {
+          case "string": {
+            if (this.state.values[item].trim() !== this.state.values[item]) {
+              newVals[item] = this.state.values[item].trim();
+            }
+            !this.state.values[item].trim().length && (isEmpty = true);
+            break;
+          }
+          case "number": {
+            isNaN(this.state.values[item]) && (isEmpty = true);
+            break;
+          }
+          default: {
+
+          }
         }
 
         if (isEmpty) {
@@ -132,48 +143,48 @@ export default class App extends React.Component {
     fields.forEach(field => {
 
       switch (field) {
-      case "firstname": {
-        if (!errors[field] && this.state[field].length < 5) {
-          errors[field] = "Must be 5 characters or more";
+        case "firstname": {
+          if (!errors[field] && this.state.values[field].length < 5) {
+            errors[field] = "Must be 5 characters or more";
+          }
+          break;
         }
-        break;
-      }
-      case "lastname": {
-        if (!errors[field] && this.state[field].length < 5) {
-          errors[field] = "Must be 5 characters or more";
+        case "lastname": {
+          if (!errors[field] && this.state.values[field].length < 5) {
+            errors[field] = "Must be 5 characters or more";
+          }
+          break;
         }
-        break;
-      }
-      case "password": {
-        if (!errors[field] && this.state[field].length < 3) {
-          errors[field] = "Must be 3 character or more";
+        case "password": {
+          if (!errors[field] && this.state.values[field].length < 3) {
+            errors[field] = "Must be 3 character or more";
+          }
+          break;
         }
-        break;
-      }
-      case "repeatPassword": {
-        if (!errors.password && this.state.password !== this.state.repeatPassword) {
-          errors.repeatPassword = "Must be equal password";
+        case "repeatPassword": {
+          if (!errors.password && this.state.values.password !== this.state.values.repeatPassword) {
+            errors.repeatPassword = "Must be equal password";
+          }
+          break;
         }
-        break;
-      }
-      case "email": {
-        // eslint-disable-next-line no-useless-escape
-        let emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!errors[field] && !emailRegexp.test(this.state[field])) {
-          errors[field] = "Invalid email address";
+        case "email": {
+          // eslint-disable-next-line no-useless-escape
+          let emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (!errors[field] && !emailRegexp.test(this.state.values[field])) {
+            errors[field] = "Invalid email address";
+          }
+          break;
         }
-        break;
-      }
-      case "mobile": {
-        let mobileRegexp = /^\d{10}$/;
-        if (!errors[field] && !mobileRegexp.test(this.state[field])) {
-          errors[field] = "Invalid mobile";
+        case "mobile": {
+          let mobileRegexp = /^\d{10}$/;
+          if (!errors[field] && !mobileRegexp.test(this.state.values[field])) {
+            errors[field] = "Invalid mobile";
+          }
+          break;
         }
-        break;
-      }
-      default: {
-        //
-      }
+        default: {
+          //
+        }
       }
     });
 
@@ -188,12 +199,14 @@ export default class App extends React.Component {
 
     if (Object.keys(errors).length) {
       this.setState({
-        errors: errors
+        errors: errors,
+        values: { ...this.state.values, ...newVals }
       });
     } else {
       let newState= {
         errors: {},
-        _step: step
+        step: this.state.step + 1,
+        values: { ...this.state.values, ...newVals }
       };
       this.setState(newState);
     }
@@ -207,38 +220,41 @@ export default class App extends React.Component {
           <div className="col-xl-5 col-lg-6 col-md-8 col-sm-10 col-12 mx-auto card mt-5">
             <form className="form card-body">
 
-              <FormStepsProgress step={this.state._step}/>
+              <Progress step={this.state.step}/>
 
-              { this.state._step === 1 && (
-                <FormStep1
-                  state={this.state}
+              { this.state.step === 1 && (
+                <Basic
+                  errors={this.state.errors}
+                  values={this.state.values}
                   onChangeHandler={this.onChangeField}
-                  onNextStepHandler={(e) => this.onNextStep(2, e)}
+                  onNextStepHandler={this.onNextStep}
                 />
               )}
 
-              { this.state._step === 2 && (
-                <FormStep2
-                  state={this.state}
+              { this.state.step === 2 && (
+                <Contacts
+                  errors={this.state.errors}
+                  values={this.state.values}
                   onChangeHandler={this.onChangeField}
-                  onNextStepHandler={(e) => this.onNextStep(3, e)}
-                  onPrevStepHandler={(e) => this.onPrevStep(1, e)}
+                  onNextStepHandler={this.onNextStep}
+                  onPrevStepHandler={this.onPrevStep}
                 />
               ) }
 
-              { this.state._step === 3 && (
-                <FormStep3
-                  state={this.state}
+              { this.state.step === 3 && (
+                <Avatar
+                  errors={this.state.errors}
+                  values={this.state.values}
                   onChangeHandler={this.onChangeFileUploadField}
-                  onNextStepHandler={(e) => this.onNextStep(4, e)}
-                  onPrevStepHandler={(e) => this.onPrevStep(2, e)}
+                  onNextStepHandler={this.onNextStep}
+                  onPrevStepHandler={this.onPrevStep}
                 />
               ) }
 
-              { this.state._step === 4 && (
-                <FormStep4
-                  state={this.state}
-                  onPrevStepHandler={(e) => this.onPrevStep(3, e)}
+              { this.state.step === 4 && (
+                <Finish
+                  values={this.state.values}
+                  onPrevStepHandler={this.onPrevStep}
                   onResetStepHandler={this.onResetForm}
                 />
               )}

@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import FormTextField from "./FormTextField";
+import FormTextField from "../FormTextField";
 
-class FormStep1 extends React.Component {
+class Basic extends React.Component {
 
   render() {
-    const { state, onChangeHandler, onNextStepHandler } = this.props;
+    const { values, errors, onChangeHandler, onNextStepHandler } = this.props;
 
     return (
       <Fragment>
@@ -14,9 +14,9 @@ class FormStep1 extends React.Component {
           id="firstname"
           name="firstname"
           placeHolder="Enter firstname"
-          value={state.firstname}
+          value={values.firstname}
           onChange={onChangeHandler}
-          error={state.errors.firstname}
+          error={errors.firstname}
         />
 
         <FormTextField
@@ -25,9 +25,9 @@ class FormStep1 extends React.Component {
           id="lastname"
           name="lastname"
           placeHolder="Enter lastname"
-          value={state.lastname}
+          value={values.lastname}
           onChange={onChangeHandler}
-          error={state.errors.lastname}
+          error={errors.lastname}
         />
 
         <FormTextField
@@ -36,9 +36,9 @@ class FormStep1 extends React.Component {
           id="password"
           name="password"
           placeHolder="Enter password"
-          value={state.password}
+          value={values.password}
           onChange={onChangeHandler}
-          error={state.errors.password}
+          error={errors.password}
         />
 
         <FormTextField
@@ -47,21 +47,21 @@ class FormStep1 extends React.Component {
           id="repeatPassword"
           name="repeatPassword"
           placeHolder="Enter repeat password"
-          value={state.repeatPassword}
+          value={values.repeatPassword}
           onChange={onChangeHandler}
-          error={state.errors.repeatPassword}
+          error={errors.repeatPassword}
         />
 
         <fieldset className="form-group">
           <div>Gender</div>
           <div className="custom-control custom-radio custom-control-inline">
             <input
-              className={ "custom-control-input" + (state.errors.gender ? " is-invalid" : "") }
+              className={`custom-control-input ${errors.gender ? " is-invalid" : ""}`}
               type="radio"
               id="male"
               name="gender"
               value="male"
-              checked={state.gender === "male"}
+              checked={values.gender === "male"}
               onChange={onChangeHandler}
             />
             <label htmlFor="male" className="custom-control-label">
@@ -70,12 +70,12 @@ class FormStep1 extends React.Component {
           </div>
           <div className="custom-control custom-radio custom-control-inline">
             <input
-              className={ "custom-control-input" + (state.errors.gender ? " is-invalid" : "") }
+              className={`custom-control-input ${errors.gender ? " is-invalid" : ""}`}
               type="radio"
               id="female"
               name="gender"
               value="female"
-              checked={state.gender === "female"}
+              checked={values.gender === "female"}
               onChange={onChangeHandler}
             />
             <label htmlFor="female" className="custom-control-label">
@@ -86,17 +86,17 @@ class FormStep1 extends React.Component {
               Ногами не бити, по іншому invalid-feedback не виходить гарно розмістити.
               Є відкритий issue https://github.com/twbs/bootstrap/issues/25540
               */
-            className={ "custom-control-input" + (state.errors.gender ? " is-invalid" : "") } />
-          {state.errors.gender && (
+            className={`custom-control-input ${errors.gender ? " is-invalid" : ""}`} />
+          {errors.gender && (
             <div className="invalid-feedback">
-              {state.errors.gender}
+              {errors.gender}
             </div>
           )}
         </fieldset>
 
         <div className="d-flex justify-content-center">
           <button
-            disabled={true}
+            disabled
             type="button"
             className="btn btn-light mr-4"
           >
@@ -116,4 +116,4 @@ class FormStep1 extends React.Component {
   }
 }
 
-export default FormStep1;
+export default Basic;

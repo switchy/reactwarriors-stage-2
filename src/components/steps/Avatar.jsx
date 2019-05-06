@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 
-class FormStep3 extends React.Component {
+class Avatar extends React.Component {
 
   static getImgNoneSrc = ("/static/default-avatar.png");
 
   render() {
-    const { state, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
+    const { values, errors, onChangeHandler, onNextStepHandler, onPrevStepHandler } = this.props;
 
     return (
       <Fragment>
@@ -13,7 +13,7 @@ class FormStep3 extends React.Component {
         <img className="mb-4"
           width="100%"
           id="avatarImage"
-          src={ state.avatar || FormStep3.getImgNoneSrc }
+          src={ values.avatar || Avatar.getImgNoneSrc }
           alt=""
         />
 
@@ -21,7 +21,7 @@ class FormStep3 extends React.Component {
           <div className="form-group custom-file">
             <input
               type="file"
-              className={ "custom-file-input" + (state.errors.avatar ? " is-invalid" : "") }
+              className={`custom-file-input ${errors.avatar ? " is-invalid" : ""}`}
               id="avatar"
               name="avatar"
               onChange={onChangeHandler}
@@ -32,9 +32,9 @@ class FormStep3 extends React.Component {
             >
               Choose avatar
             </label>
-            {state.errors.avatar && (
+            {errors.avatar && (
               <div className="invalid-feedback">
-                {state.errors.avatar}
+                {errors.avatar}
               </div>
             )}
           </div>
@@ -62,4 +62,4 @@ class FormStep3 extends React.Component {
   }
 }
 
-export default FormStep3;
+export default Avatar;
